@@ -24,10 +24,10 @@ module.exports = {
         },
 
         // For hosts (please adjust)
-        // remotes: {
-        //     "shell": "shell@http://localhost:4202/remoteEntry.js",
+        remotes: {
+            "shell": "shell@http://localhost:4202/remoteEntry.js",
 
-        // },
+        },
 
         shared: {
           "@angular/core": { singleton: true, strictVersion: true },
