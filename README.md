@@ -1,27 +1,85 @@
-# MfeFromScratchDemo
+# Basic MFE — Module Federation Proof of Concept
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
+> A historical Angular microfrontend experiment reframed as an architecture and independent-delivery case study.
 
-## Development server
+## 30-second read
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This repository explores **microfrontend boundaries, runtime composition and independent application delivery**. The 2026 treatment preserves the original proof of concept while making the engineering questions explicit.
 
-## Code scaffolding
+**Primary question:** when does splitting a frontend into independently delivered applications create real value, and when does it only create operational complexity?
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Architecture
 
-## Build
+```text
+                    Host / Shell
+                         |
+              Module Federation boundary
+                    /           \
+                   /             \
+            Remote A           Remote B
+             Angular             Angular
+                 \               /
+                  \             /
+                   shared contracts
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## What this demonstrates
 
-## Running unit tests
+- Angular application boundaries
+- Webpack 5 Module Federation
+- remote/host composition
+- shared dependency concerns
+- independent deployment trade-offs
+- frontend integration failure modes
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Run it online
 
-## Running end-to-end tests
+**[Open in GitHub Codespaces](https://codespaces.new/MountainBridge/Basic-MFE)** — recommended full-project environment.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+**[Open in StackBlitz](https://stackblitz.com/github/MountainBridge/Basic-MFE)** — browser playground for inspecting/running the project. Because this is a historical Angular/Module Federation stack, Codespaces is the authoritative path if the browser sandbox hits version constraints.
 
-## Further help
+## Run locally
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm install --legacy-peer-deps
+npm start
+```
+
+Then follow the host/remote ports exposed by the application.
+
+## Failure-first questions
+
+| Scenario | What we need to prove |
+|---|---|
+| remote unavailable | Does the shell degrade gracefully? |
+| incompatible shared dependency | Can independently released teams coexist? |
+| remote version mismatch | How are contracts/versioning handled? |
+| slow remote | What is the UX fallback? |
+| deployment rollback | Can one remote be rolled back independently? |
+| duplicated dependencies | Is the runtime actually gaining efficiency? |
+
+## Modernization path
+
+```text
+POC
+ ↓
+Define ownership boundaries
+ ↓
+Define contracts + compatibility policy
+ ↓
+Independent CI/CD
+ ↓
+Failure handling + observability
+ ↓
+Performance measurement
+ ↓
+Decide whether MFE complexity is justified
+```
+
+## Interview prompts
+
+1. Why Module Federation instead of a monolith?
+2. What should and should not be shared?
+3. How do you version a remote contract?
+4. What happens when a remote fails after the shell has loaded?
+5. How would you measure whether MFE improved delivery rather than just architecture diagrams?
