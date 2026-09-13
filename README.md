@@ -1,27 +1,32 @@
-# MfeFromScratchDemo
+# Micro Frontend from Scratch
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
+A focused Angular experiment for understanding **micro-frontend boundaries, independently developed UI surfaces and composition**.
 
-## Development server
+## Engineering question
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+When does splitting a front end into independently owned pieces actually improve a system, and what complexity does that introduce at runtime and during development?
 
-## Code scaffolding
+## What to explore
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- micro-frontend composition
+- application boundaries
+- independently developed UI modules
+- integration/runtime concerns
+- the trade-off between modularity and operational complexity
 
-## Build
+## Run locally
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```bash
+npm install
+npm start
+```
 
-## Running unit tests
+Use the development URL printed by the project tooling.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Important context
 
-## Running end-to-end tests
+The implementation is based on an older Angular generation and is retained as a learning artifact. The portfolio does **not** claim that an older dependency version is a modern production recommendation.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+The current MountainBridge work focuses on explaining architecture through the problem first, then the technology:
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+**user/team boundary → constraints → architectural options → decision → implementation → failure modes → evidence.**
