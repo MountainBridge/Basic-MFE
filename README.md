@@ -1,27 +1,49 @@
-# MfeFromScratchDemo
+# Basic-MFE · Micro-frontends with Module Federation
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
+A minimal, readable example of splitting one Angular app into a **shell (host)** and a **remote (mfe1)** using Webpack 5 Module Federation. The shell loads the remote's `TodoModule` at runtime, only when the user navigates to `/todo`.
 
-## Development server
+## Why this exists
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Large front ends slow teams down when every change ships through one build. Module Federation lets separate teams build and deploy parts of the UI independently, while users still see one app. This repo strips the idea down to the smallest working version so the moving parts are easy to see.
 
-## Code scaffolding
+## How it fits together
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```text
+ browser ──► shell (host, :4202)
+               │  route ''      → HomeComponent
+               │  route 'todo'  → import('mfe1/TodoModule')   (lazy, at runtime)
+               ▼
+            mfe1 (remote, :4203)
+               exposes './TodoModule' via remoteEntry.js
+               shares @angular/* as singletons
+```
 
-## Build
+| Piece | File | What to look at |
+|---|---|---|
+| Remote config | `projects/mfe1/webpack.config.js` | `exposes` and the `shared` singletons |
+| Host routing | `projects/shell/src/app/app-routing.module.ts` | `loadChildren` importing `mfe1/TodoModule` |
+| Async bootstrap | `projects/*/src/main.ts` → `bootstrap.ts` | Why the app bootstraps in a separate file |
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Run it
 
-## Running unit tests
+```bash
+npm install
+npx ng serve mfe1    # remote on http://localhost:4203
+npx ng serve shell   # host   on http://localhost:4202
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Open http://localhost:4202 and click through to **Todo**. In DevTools → Network you'll see `remoteEntry.js` load from :4203 only at that moment.
 
-## Running end-to-end tests
+## Trade-offs worth knowing
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- **Shared dependencies:** Angular must be a singleton across host and remote, or you get two copies and confusing runtime errors.
+- **Version drift:** independent deploys are the point, but contract changes to an exposed module need versioning.
+- **When not to use it:** for a single small team, a well-structured monorepo is usually simpler.
 
-## Further help
+## Stack
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Angular 11 · Webpack 5 Module Federation · `@angular-architects/module-federation`
+
+---
+
+Part of [Nidhi Verma's engineering notes](https://github.com/MountainBridge). More patterns in the [Engineering Casebook](https://github.com/MountainBridge/MountainBridges).
